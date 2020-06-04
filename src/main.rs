@@ -11,7 +11,7 @@ mod vector_fn;
  */
 
 fn main() {
-    let res: Vec<i32> = prime_sieve(100);
+    let res: Vec<i32> = prime_sieve(100000);
     println!("{:?}", res);
 }
 
@@ -22,12 +22,16 @@ fn prime_sieve(limit: i32) -> Vec<i32> {
         sieve.push(x);
     }
 
-    //
+    // Iterate over opts 'sieving' out values.
+    // If x is unmarked then it is prime
+    // remove all multiples of x that are less than n (Multiples are composite)
+    // All unmarked numbers remaining are prime.
     let mut invalid: Vec<i32> = Vec::new();
-    for x in sieve.iter() {
-        let mut multiple = *x;
+    let bound: i32 = (limit as f32).sqrt() as i32 + 1;
+    for x in 2..bound {
+        let mut multiple = x;
         while multiple < limit {
-            multiple += *x;
+            multiple += x;
             if !invalid.contains(&multiple) {
                 invalid.push(multiple);
             }
