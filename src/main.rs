@@ -1,3 +1,5 @@
+extern crate clap;
+use clap::{Arg, App};
 mod vector_fn;
 
 /**
@@ -11,7 +13,19 @@ mod vector_fn;
  */
 
 fn main() {
-    let res: Vec<i32> = prime_sieve(100000);
+    let matches = App::new("Eratosthenes Prime Sieve")
+        .version("0.0.1")
+        .author("damons-git")
+        .about("A simple application that generates the list of prime numbers within a limit.")
+        .arg(Arg::with_name("COUNT")
+            .short("c")
+            .long("count")
+            .takes_value(true)
+            .help("Integer limit for the sieve to generate primes up to"))
+        .get_matches();
+
+    let count: &str = matches.value_of("count").unwrap_or("100");
+    let res: Vec<i32> = prime_sieve(count.parse::<i32>().unwrap());
     println!("{:?}", res);
 }
 
