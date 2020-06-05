@@ -1,6 +1,5 @@
 extern crate clap;
 use clap::{Arg, App};
-mod vector_fn;
 
 /**
  * Sieve of Eratosthenes for primality testing.
@@ -24,36 +23,35 @@ fn main() {
             .help("Integer limit for the sieve to generate primes up to"))
         .get_matches();
 
-    let count: &str = matches.value_of("count").unwrap_or("100");
+    let count: &str = matches.value_of("COUNT").unwrap_or("100");
     let res: Vec<i32> = prime_sieve(count.parse::<i32>().unwrap());
     println!("{:?}", res);
 }
 
 fn prime_sieve(limit: i32) -> Vec<i32> {
     // Generate vector containing numbers 2 through to limit.
-    let mut sieve: Vec<i32> = Vec::new();
-    for x in 2..(limit+1) {
-        sieve.push(x);
+    let mut sieve: Vec<bool> = Vec::new();
+    for _ in 0..(limit+1) {
+        sieve.push(true);
     }
 
-    // Iterate over opts 'sieving' out values.
-    // If x is unmarked then it is prime
-    // remove all multiples of x that are less than n (Multiples are composite)
-    // All unmarked numbers remaining are prime.
-    let mut invalid: Vec<i32> = Vec::new();
-    let bound: i32 = (limit as f32).sqrt() as i32 + 1;
-    for x in 2..bound {
-        let mut multiple = x;
-        while multiple < limit {
-            multiple += x;
-            if !invalid.contains(&multiple) {
-                invalid.push(multiple);
+    // Iterate over values marking a number as prime and 'sieving' out
+    // multiples of that which are less than the limit.
+    // TODO: Fix to work in bound range (Sqrt of limit)
+    let mut primes: Vec<i32> = Vec::new();
+    let _bound: i32 = (limit as f32).sqrt() as i32 + 1;
+    for x in 2..limit {
+        if sieve[x as usize] {
+            primes.push(x);
+            let mut multiple = x;
+            while multiple < limit {
+                sieve[multiple as usize] = false;
+                multiple += x;
             }
         }
     }
 
-    let res: Vec<i32> = vector_fn::diff(sieve, invalid);
-    return res;
+    return primes;
 }
 
 
