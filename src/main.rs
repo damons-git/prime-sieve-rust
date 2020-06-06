@@ -28,7 +28,8 @@ fn main() {
             .help("The number of primes to display"))
         .get_matches();
     let limit: i32 = (matches.value_of("LIMIT").unwrap_or("100")).parse::<i32>().unwrap();
-    let _count: i32 = (matches.value_of("COUNT").unwrap_or("10")).parse::<i32>().unwrap();
+    let count: i32 = (matches.value_of("COUNT").unwrap_or(&limit.to_string()[..])).parse::<i32>().unwrap();
+    println!("Limit: {} \nCount: {}", limit, count);
 
     let res: Vec<i32> = prime_sieve(limit);
     println!("{:?}", res);
