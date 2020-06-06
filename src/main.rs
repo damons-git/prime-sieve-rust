@@ -31,8 +31,15 @@ fn main() {
     let count: i32 = (matches.value_of("COUNT").unwrap_or(&limit.to_string()[..])).parse::<i32>().unwrap();
     println!("Limit: {} \nCount: {}", limit, count);
 
+    // Calculate and display N largest primes.
     let res: Vec<i32> = prime_sieve(limit);
-    println!("{:?}", res);
+    let count: i32 = if res.len() < count as usize { res.len() as i32 } else { count };
+    let min: i32 = res.len() as i32 - count;
+    let max: i32 = res.len() as i32;
+    let iter: std::ops::Range<i32> = min..max;
+    for n in iter {
+        println!("{}", res[n as usize]);
+    }
 }
 
 fn prime_sieve(limit: i32) -> Vec<i32> {
