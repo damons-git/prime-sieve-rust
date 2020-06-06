@@ -16,15 +16,21 @@ fn main() {
         .version("0.0.1")
         .author("damons-git")
         .about("A simple application that generates the list of prime numbers within a limit.")
+        .arg(Arg::with_name("LIMIT")
+            .short("l")
+            .long("limit")
+            .takes_value(true)
+            .help("Integer limit for the sieve to generate primes up to"))
         .arg(Arg::with_name("COUNT")
             .short("c")
             .long("count")
             .takes_value(true)
-            .help("Integer limit for the sieve to generate primes up to"))
+            .help("The number of primes to display"))
         .get_matches();
+    let limit: i32 = (matches.value_of("LIMIT").unwrap_or("100")).parse::<i32>().unwrap();
+    let _count: i32 = (matches.value_of("COUNT").unwrap_or("10")).parse::<i32>().unwrap();
 
-    let count: &str = matches.value_of("COUNT").unwrap_or("100");
-    let res: Vec<i32> = prime_sieve(count.parse::<i32>().unwrap());
+    let res: Vec<i32> = prime_sieve(limit);
     println!("{:?}", res);
 }
 
