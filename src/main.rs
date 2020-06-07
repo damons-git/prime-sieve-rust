@@ -68,4 +68,14 @@ fn prime_sieve(limit: i32) -> Vec<i32> {
     return primes;
 }
 
+// Module unit tests.
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_eg() {
+        assert!(true);
+    }
+}
 
