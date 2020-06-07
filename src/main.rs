@@ -74,8 +74,33 @@ mod test {
     use super::*;
 
     #[test]
-    fn test_eg() {
-        assert!(true);
+    fn prime_sieve_short() {
+        let res: Vec<i32> = prime_sieve(10);
+        let expected: Vec<i32> = vec![2, 3, 5, 7];
+        assert_eq!(res, expected);
+    }
+
+    #[test]
+    fn prime_sieve_long() {
+        let res: Vec<i32> = prime_sieve(100);
+        let expected: Vec<i32> = vec![2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97];
+        assert_eq!(res, expected);
+    }
+
+    #[test]
+    fn prime_sieve_edge_case() {
+        let res_one: Vec<i32> = prime_sieve(1);
+        let res_zero: Vec<i32> = prime_sieve(0);
+        let expected: Vec<i32> = vec![];
+        assert_eq!(res_one, expected);
+        assert_eq!(res_zero, expected);
+    }
+
+    #[test]
+    fn prime_sieve_errorneous() {
+        let res: Vec<i32> = prime_sieve(-1);
+        let expected: Vec<i32> = vec![];
+        assert_eq!(res, expected);
     }
 }
 
