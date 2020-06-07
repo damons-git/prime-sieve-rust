@@ -1,5 +1,6 @@
 extern crate clap;
 use clap::{Arg, App};
+use std::time::Instant;
 
 /**
  * Sieve of Eratosthenes for primality testing.
@@ -29,11 +30,15 @@ fn main() {
         .get_matches();
     let limit: i32 = (matches.value_of("LIMIT").unwrap_or("100")).parse::<i32>().unwrap();
     let count: i32 = (matches.value_of("COUNT").unwrap_or(&limit.to_string()[..])).parse::<i32>().unwrap();
-    println!("Limit: {} \nCount: {}", limit, count);
 
     // Calculate and display N largest primes.
+    let start_t = Instant::now();
     let primes: Vec<i32> = prime_sieve(limit);
+    let elapsed = start_t.elapsed();
     let n_primes = fetch_n_primes(count, primes);
+    println!("Calculate to: {}", limit);
+    println!("Display top: {}", count);
+    println!("Time taken: {:?}", elapsed);
     println!("{:?}", n_primes);
 }
 
