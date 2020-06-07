@@ -67,10 +67,9 @@ fn prime_sieve(limit: i32) -> Vec<i32> {
 
     // Iterate over values marking a number as prime and 'sieving' out
     // multiples of that which are less than the limit.
-    // TODO: Fix to work in bound range (Sqrt of limit)
     let mut primes: Vec<i32> = Vec::new();
-    let _bound: i32 = (limit as f32).sqrt() as i32 + 1;
-    for x in 2..limit {
+    let bound: i32 = (limit as f32).sqrt() as i32 + 1;
+    for x in 2..bound {
         if sieve[x as usize] {
             primes.push(x);
             let mut multiple = x;
@@ -78,6 +77,13 @@ fn prime_sieve(limit: i32) -> Vec<i32> {
                 sieve[multiple as usize] = false;
                 multiple += x;
             }
+        }
+    }
+
+    // Mark all integers not eliminated through composition as prime.
+    for x in bound..limit {
+        if sieve[x as usize] {
+            primes.push(x);
         }
     }
 
