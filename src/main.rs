@@ -59,6 +59,8 @@ fn fetch_n_primes(n: i32, primes: Vec<i32>) -> Vec<i32> {
 }
 
 fn prime_sieve(limit: i32) -> Vec<i32> {
+    if limit < 0 { panic!("Cannot have a negative limit to calculate primes up to.") }
+
     // Generate vector containing numbers 2 through to limit.
     let mut sieve: Vec<bool> = Vec::new();
     for _ in 0..(limit+1) {
@@ -119,6 +121,7 @@ mod test {
     }
 
     #[test]
+    #[should_panic]
     fn prime_sieve_errorneous() {
         let res: Vec<i32> = prime_sieve(-1);
         let expected: Vec<i32> = vec![];
