@@ -32,14 +32,25 @@ fn main() {
     println!("Limit: {} \nCount: {}", limit, count);
 
     // Calculate and display N largest primes.
-    let res: Vec<i32> = prime_sieve(limit);
-    let count: i32 = if res.len() < count as usize { res.len() as i32 } else { count };
-    let min: i32 = res.len() as i32 - count;
-    let max: i32 = res.len() as i32;
+    let primes: Vec<i32> = prime_sieve(limit);
+    let n_primes = fetch_n_primes(count, primes);
+    println!("{:?}", n_primes);
+}
+
+fn fetch_n_primes(n: i32, primes: Vec<i32>) -> Vec<i32> {
+    if n < 0 { panic!("Cannot fetch a negative number of results.") }
+
+    let mut output: Vec<i32> = vec![];
+    let count: i32 = if primes.len() < n as usize { primes.len() as i32 } else { n };
+    let min: i32 = primes.len() as i32 - count;
+    let max: i32 = primes.len() as i32;
+
     let iter: std::ops::Range<i32> = min..max;
     for n in iter {
-        println!("{}", res[n as usize]);
+        output.push(primes[n as usize]);
     }
+
+    return output;
 }
 
 fn prime_sieve(limit: i32) -> Vec<i32> {
@@ -101,6 +112,33 @@ mod test {
         let res: Vec<i32> = prime_sieve(-1);
         let expected: Vec<i32> = vec![];
         assert_eq!(res, expected);
+    }
+
+    #[test]
+    fn fetch_n_primes_top_three() {
+        let res: Vec<i32> = fetch_n_primes(3, vec![2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31]);
+        let expected: Vec<i32> = vec![23, 29, 31];
+        assert_eq!(res, expected);
+    }
+
+    #[test]
+    fn fetch_n_primes_overflow() {
+        let res: Vec<i32> = fetch_n_primes(10, vec![2, 3, 5]);
+        let expected: Vec<i32> = vec![2, 3, 5];
+        assert_eq!(res, expected);
+    }
+
+    #[test]
+    fn fetch_n_primes_edge_case() {
+        let res: Vec<i32> = fetch_n_primes(0, vec![2, 3, 5, 7, 11]);
+        let expected: Vec<i32> = vec![];
+        assert_eq!(res, expected);
+    }
+
+    #[test]
+    #[should_panic]
+    fn fetch_n_primes_erroneous() {
+        let _: Vec<i32> = fetch_n_primes(-1, vec![2, 3, 5]);
     }
 }
 
